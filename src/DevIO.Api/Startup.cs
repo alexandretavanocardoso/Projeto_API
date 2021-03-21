@@ -32,6 +32,7 @@ namespace DevIO.Api
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
+            // Inicializa as injeções de dependecias - Metodo Criado
             services.ResolveDependecies();
         }
 

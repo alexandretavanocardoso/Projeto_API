@@ -9,7 +9,7 @@ namespace DevIO.Api.ViewModels
     public class FornecedorViewModel
     {
         [Key]
-        public Guid id { get; set; }
+        public Guid Id { get; set; }
         
         [Required(ErrorMessage = "Campo Obrigatório")]
         [StringLength(100, ErrorMessage = "Máximo 14 caracteres")]
