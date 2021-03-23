@@ -30,8 +30,17 @@ namespace DevIO.Api
         {
             services.AddDbContext<MeuDbContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddAutoMapper(typeof(Startup));
+
             services.AddControllers();
+
+            // Usado para retirar a forma padrao de erro da modelState
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
             // Inicializa as injeções de dependecias - Metodo Criado
             services.ResolveDependecies();
         }

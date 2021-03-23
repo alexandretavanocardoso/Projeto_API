@@ -1,7 +1,9 @@
 ﻿using DevIO.Api.ViewModels;
 using DevIO.Business.Intefaces;
+using DevIO.Business.Notificacoes;
 using DevIO.Data.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,12 +15,55 @@ namespace DevIO.Api.Controllers
     [ApiController]
     public abstract class MainController : ControllerBase
     {
-        // Classe abstrata, apenas pode ser herdada
+        private readonly INotificador _notificador;
+
+        public MainController(INotificador notificador)
+        {
+            _notificador = notificador;
+        }
+
+        protected bool OperacaoValida()
+        {
+            return !_notificador.TemNotificacao();
+        }
+
+        protected ActionResult CustomResponse(object result = null)
+        {
+            if (OperacaoValida())
+            {
+                return Ok(new { 
+                    success = true,
+                    data = result
+                });
+            }
+
+            return BadRequest(new { 
+                success = false,
+                errors = _notificador.ObterNotificacoes().Select(n => n.Mensagem)
+            });
+        }
 
         // Validação de notificação de erro
+        protected ActionResult CustomResponse(ModelStateDictionary modelState)
+        {
+            if(!modelState.IsValid) NotificarErroModelInvalida(modelState);
+            return CustomResponse();
+        }
 
-        // Validação de modelstate
+        protected void NotificarErroModelInvalida(ModelStateDictionary modelState)
+        {
+            var erros = modelState.Values.SelectMany(e => e.Errors);
 
-        // Validação da operação de negócios
+            foreach (var erro in erros)
+            {
+                var errorMsg = erro.Exception == null ? erro.ErrorMessage : erro.Exception.Message;
+                NotificarErro(errorMsg);
+            }
+        }
+
+        protected void NotificarErro(string mensagem)
+        {
+            _notificador.Handle(new Notificacao(mensagem));
+        }
     }
 }
