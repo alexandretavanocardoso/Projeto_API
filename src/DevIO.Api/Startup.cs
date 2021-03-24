@@ -42,6 +42,15 @@ namespace DevIO.Api
             {
                 options.SuppressModelStateInvalidFilter = true;
             });
+            
+             // Abre pra quem quiser acessar
+            //services.AddCors(options => {  
+            //    options.AddPolicy("Development",
+            //                      builder => builder.AllowAnyOrigin()
+            //            .AllowAnyMethod()
+            //            .AllowAnyHeader()
+            //            .AllowCredentials());
+            //});
 
             // Inicializa as injeções de dependecias - Metodo Criado
             services.ResolveDependecies();
@@ -54,13 +63,11 @@ namespace DevIO.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
+            //app.UseCors("Development");
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
