@@ -28,9 +28,11 @@ namespace DevIO.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // ConexÃ£o com o banco
             services.AddDbContext<MeuDbContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            // Usando Mapper
             services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers();
@@ -41,7 +43,7 @@ namespace DevIO.Api
                 options.SuppressModelStateInvalidFilter = true;
             });
 
-            // Inicializa as injeções de dependecias - Metodo Criado
+            // Inicializa as injeÃ§Ãµes de dependecias - Metodo Criado
             services.ResolveDependecies();
         }
 
