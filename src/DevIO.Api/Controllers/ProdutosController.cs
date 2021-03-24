@@ -79,9 +79,6 @@ namespace DevIO.Api.Controllers
 
         private bool UploadImagem(string arquivo, string imgNome)
         {
-            // Converte para Base64
-            var imageDataByteArray = Convert.FromBase64String(arquivo);
-
             // Verifica se meu aqruivo é null ou vazio
             if (string.IsNullOrEmpty(arquivo))
             {
@@ -89,6 +86,9 @@ namespace DevIO.Api.Controllers
                 NotificarErro("Forneça uma imagem !");
                 return false;
             }
+        
+            // Converte para Base64
+            var imageDataByteArray = Convert.FromBase64String(arquivo);
 
             // Pega a combinação(Meu Diretório onde aplicação esta rodando, "caminho" , nomeImagem)
             // Salvando Imagem no proprio projeto
