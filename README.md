@@ -10,3 +10,10 @@
 
 - elmah.io
 - HealtChecks
+
+## Cadastros
+#### Upload de Imagens, arquivos
+
+- Fornecedores
+- Produtos
+
