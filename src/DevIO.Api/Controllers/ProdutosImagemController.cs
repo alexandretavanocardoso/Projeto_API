@@ -79,7 +79,7 @@ namespace DevIO.Api.Controllers
                 return false;
             }
 
-            // stream para copiar no servidor(maquina), FileMode.Create - Cria o arquivo
+            // stream(manda a imagem em "pedaços") para copiar no servidor(maquina), FileMode.Create - Cria o arquivo
             using (var stream = new FileStream(path, FileMode.Create))
             {
                 // Copia no servidor(maquina)
