@@ -35,22 +35,7 @@ namespace DevIO.Api
             // Usando Mapper
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddControllers();
-
-            // Usado para retirar a forma padrao de erro da modelState
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.SuppressModelStateInvalidFilter = true;
-            });
-            
-             // Abre pra quem quiser acessar
-            //services.AddCors(options => {  
-            //    options.AddPolicy("Development",
-            //                      builder => builder.AllowAnyOrigin()
-            //            .AllowAnyMethod()
-            //            .AllowAnyHeader()
-            //            .AllowCredentials());
-            //});
+            services.WebApiConfig();
 
             // Inicializa as injeções de dependecias - Metodo Criado
             services.ResolveDependecies();
@@ -63,15 +48,8 @@ namespace DevIO.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-            
-            //app.UseCors("Development");
-            app.UseHttpsRedirection();
-            app.UseRouting();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+
+            app.WebApiConfig();
         }
     }
 }
