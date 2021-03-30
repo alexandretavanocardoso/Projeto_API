@@ -1,9 +1,15 @@
 
 
+using DevIO.Api.Extensions;
 using DevIO.Api.ViewModels;
 using DevIO.Business.Intefaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DevIO.Api.Controllers
@@ -13,13 +19,16 @@ namespace DevIO.Api.Controllers
     {
         private readonly SignInManager<IdentityUser> _signInManager; // Autenticacao usuario
         private readonly UserManager<IdentityUser> _userManager; // cria usuario
+        private readonly AppSettings _appSettings; // cria usuario
 
         public AuthController(INotificador notificador,
                               SignInManager<IdentityUser> signInManager,
-                              UserManager<IdentityUser> userManager) : base(notificador)
+                              UserManager<IdentityUser> userManager,
+                              IOptions<AppSettings> appSettings) : base(notificador)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _appSettings = appSettings.Value;
         }
 
         [HttpPost("novaConta")]
@@ -41,7 +50,7 @@ namespace DevIO.Api.Controllers
             {
                 // ja faz o login do usuario caso o result for sucesso
                 await _signInManager.SignInAsync(user, false); // SignInAsync(usuario, Se é persistente)
-                return CustomResponse(registerUser);
+                return CustomResponse(GerarJsonWebToken());
             }
 
             foreach (var error in result.Errors)
@@ -62,7 +71,7 @@ namespace DevIO.Api.Controllers
 
             if (result.Succeeded)
             {
-                return CustomResponse(loginUser);
+                return CustomResponse(GerarJsonWebToken());
             }
 
             // se tiver bloqueado
@@ -75,6 +84,28 @@ namespace DevIO.Api.Controllers
             // Caso errar os campos
             NotificarErro("usuario e senha incorreto");
             return CustomResponse(loginUser);
+        }
+
+        private string GerarJsonWebToken() 
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            // Gera chave
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+
+            // Gera Token
+            var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
+            {
+                Issuer = _appSettings.Emissor,
+                Audience = _appSettings.ValidoEm,
+                Expires = DateTime.UtcNow.AddHours(_appSettings.ExpiracaoHoras),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            });
+
+            // encoding do token
+            var encodingToken = tokenHandler.WriteToken(token); // Serializa um jsonwbtoken
+
+            return encodingToken;
         }
     }
 }
