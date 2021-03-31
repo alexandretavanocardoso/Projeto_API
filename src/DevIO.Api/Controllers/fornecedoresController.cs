@@ -1,4 +1,5 @@
 using AutoMapper;
+using DevIO.Api.Extensions;
 using DevIO.Api.ViewModels;
 using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
@@ -59,6 +60,8 @@ namespace DevIO.Api.Controllers
             return fornecedor;
         }
 
+        //[ClaimsAuthorize("Claim", "Valor")]
+        [ClaimsAuthorize("Fornecedor", "Adicionar")]
         [HttpPost]
         public async Task<ActionResult<FornecedorViewModel>> Adicionar(FornecedorViewModel fornecedorViewModel)
         {
@@ -69,6 +72,8 @@ namespace DevIO.Api.Controllers
             return CustomResponse(fornecedorViewModel);
         }
 
+        //[ClaimsAuthorize("Claim", "Valor")]
+        [ClaimsAuthorize("Fornecedor", "Atualizar")]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<FornecedorViewModel>> Atualizar(Guid id, FornecedorViewModel fornecedorViewModel)
         {
@@ -85,6 +90,8 @@ namespace DevIO.Api.Controllers
             return CustomResponse(fornecedorViewModel);
         }
 
+        //[ClaimsAuthorize("Claim", "Valor")]
+        [ClaimsAuthorize("Fornecedor", "Excluir")]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<FornecedorViewModel>> Excluir(Guid id) {
 
@@ -104,6 +111,8 @@ namespace DevIO.Api.Controllers
 
         }
 
+        //[ClaimsAuthorize("Claim", "Valor")]
+        [ClaimsAuthorize("Fornecedor", "Atualizar")]
         [HttpPut("atualizar-endereco/{id:guid}")]
         public async Task<ActionResult<FornecedorViewModel>> AtualizarEndereco(Guid id, EnderecoViewModel enderecoViewModel)
         {
@@ -120,11 +129,11 @@ namespace DevIO.Api.Controllers
             return CustomResponse(enderecoViewModel);
         }
 
-        public async Task<FornecedorViewModel> ObterFornecedorProdutosEndereco(Guid Id) { 
+        private async Task<FornecedorViewModel> ObterFornecedorProdutosEndereco(Guid Id) { 
             return _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorProdutosEndereco(Id));
         }
 
-        public async Task<FornecedorViewModel> ObterFornecedorEndereco(Guid Id)
+        private async Task<FornecedorViewModel> ObterFornecedorEndereco(Guid Id)
         {
             return _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorEndereco(Id));
         }

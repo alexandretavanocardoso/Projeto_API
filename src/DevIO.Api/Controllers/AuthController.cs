@@ -9,6 +9,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -50,7 +52,7 @@ namespace DevIO.Api.Controllers
             {
                 // ja faz o login do usuario caso o result for sucesso
                 await _signInManager.SignInAsync(user, false); // SignInAsync(usuario, Se é persistente)
-                return CustomResponse(GerarJsonWebToken());
+                return CustomResponse(await GerarJsonWebToken(registerUser.Email));
             }
 
             foreach (var error in result.Errors)
@@ -71,7 +73,7 @@ namespace DevIO.Api.Controllers
 
             if (result.Succeeded)
             {
-                return CustomResponse(GerarJsonWebToken());
+                return CustomResponse(await GerarJsonWebToken(loginUser.Email));
             }
 
             // se tiver bloqueado
@@ -86,18 +88,43 @@ namespace DevIO.Api.Controllers
             return CustomResponse(loginUser);
         }
 
-        private string GerarJsonWebToken() 
+        private async Task<LoginResponseViewModel> GerarJsonWebToken(string email) 
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
+            // Pega o usuario
+            var user = await _userManager.FindByEmailAsync(email);
+            // Pega a Claim
+            var claim = await _userManager.GetClaimsAsync(user);
+            // Pega os Roles - Perfis
+            var roles = await _userManager.GetRolesAsync(user);
 
+            // Pessando Claims que ja sao passadas na geração do Token
+            // Porem para ter certeza exister esses trechos de códigos
+            claim.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id)); // usuario
+            claim.Add(new Claim(JwtRegisteredClaimNames.Email, user.Email));
+            claim.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())); // quando token tem id proprio
+            claim.Add(new Claim(JwtRegisteredClaimNames.Nbf, ToUnixEpochDate(DateTime.UtcNow).ToString())); 
+            claim.Add(new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(DateTime.UtcNow).ToString(), ClaimValueTypes.Integer64));
+
+            // Adicionando na coleção as roles
+            foreach (var role in roles)
+            {
+                claim.Add(new Claim("role", role));
+            }
+
+            // Convertendo as claims para o IdentityClaims
+            var identityClaims = new ClaimsIdentity();
+            identityClaims.AddClaims(claim);
+
+            
+            var tokenHandler = new JwtSecurityTokenHandler();
             // Gera chave
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-
             // Gera Token
             var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
             {
                 Issuer = _appSettings.Emissor,
                 Audience = _appSettings.ValidoEm,
+                Subject = identityClaims, // passando as claims para o token
                 Expires = DateTime.UtcNow.AddHours(_appSettings.ExpiracaoHoras),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             });
@@ -105,7 +132,23 @@ namespace DevIO.Api.Controllers
             // encoding do token
             var encodingToken = tokenHandler.WriteToken(token); // Serializa um jsonwbtoken
 
-            return encodingToken;
+            // Mostrando os dados do usuario daquele token gerado
+            var response = new LoginResponseViewModel() {
+                AccessToken = encodingToken,
+                ExpiresIn = TimeSpan.FromHours(_appSettings.ExpiracaoHoras).TotalSeconds,
+                UserToken = new UserTokenViewModel
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Claims = claim.Select(claim => new ClaimViewModel {Type = claim.Type, Value = claim.Value})
+                }
+            };
+
+            return response;
         }
+
+        // metodo para retornas uma data
+        private static long ToUnixEpochDate(DateTime date)
+            => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
     }
 }
