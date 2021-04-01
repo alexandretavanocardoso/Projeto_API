@@ -44,11 +44,23 @@ namespace DevIO.Api
         {
             if (env.IsDevelopment())
             {
+                //app.UseCors("Development");
                 app.UseDeveloperExceptionPage();
+            } 
+            else
+            {
+                //app.UseCors("Production");
+                app.UseHsts(); // Segurança de https
             }
 
             app.UseAuthentication();
-            app.WebApiConfig();
+            app.UseMvcConfiguration();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
         }
     }
 }
