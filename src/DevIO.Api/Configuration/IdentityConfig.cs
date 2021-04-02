@@ -19,18 +19,21 @@ namespace DevIO.Api.Configuration
     {
         public static IServiceCollection AddIdentityConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
+            #region [ Conexão com o Banco ]
             // Conexão com o banco
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            #endregion [ Conexão com o Banco ]
 
+            #region [ Identity, para perfis ]
             services.AddIdentityCore<IdentityUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddErrorDescriber<IdentityMensagemPortugues>()
                 .AddDefaultTokenProviders();
-                
-             // JWT - Json Web Token
+            #endregion [ Identity, para perfis ]
 
+            #region [ JWT - Json Web Token ] 
             // Configurando
             var appSettingsSection = configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
@@ -55,7 +58,8 @@ namespace DevIO.Api.Configuration
                     ValidIssuer = appSettings.Emissor // Configurando emissor
                 };
             });
-            
+            #endregion [ JWT - Json Web Token ] 
+
             return services;
         }
     }

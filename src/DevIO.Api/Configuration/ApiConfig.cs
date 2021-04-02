@@ -15,12 +15,31 @@ namespace DevIO.Api.Configuration
         {
             services.AddControllers();
 
+            #region [ Versionamento da API ]
+            services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true; // Quando não tiver versão especificada sobe a default
+                options.DefaultApiVersion = new ApiVersion(1, 0); // Versão 2.0
+                options.ReportApiVersions = true; // Passa no header do response para saber se a versao esta Ok
+            });
+
+            services.AddVersionedApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV"; // Agrupar a versao  da API ("'v'parametros aceitos")
+                options.SubstituteApiVersionInUrl = true; // Seta o valor dentro da Api, onde pode ser substituido nas rotas
+
+            });
+            #endregion [ Versionamento da API ]
+
+            #region [ Tirando Comportamentos Padroes ]
             // Usado para retirar a forma padrao de erro da modelState
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
             });
+            #endregion [ Tirando Comportamentos Padroes ]
 
+            #region [ Cors ]
             // Abre pra quem quiser acessar
             // Politica do Cors nao funciona localmente
             //services.AddCors(options =>
@@ -50,6 +69,7 @@ namespace DevIO.Api.Configuration
             //            .WithHeaders(HeaderNames.ContentType, "x-custom-header")
             //            .AllowAnyHeader());
             //});
+            #endregion [ Cors ]
 
             return services;
         }

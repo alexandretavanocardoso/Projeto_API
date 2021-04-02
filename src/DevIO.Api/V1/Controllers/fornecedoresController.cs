@@ -1,4 +1,5 @@
 using AutoMapper;
+using DevIO.Api.Controller;
 using DevIO.Api.Extensions;
 using DevIO.Api.ViewModels;
 using DevIO.Business.Intefaces;
@@ -11,10 +12,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DevIO.Api.Controllers
+namespace DevIO.Api.V1.Controllers
 {
     [Authorize] // Autorização para entrar na API
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v1/fornecedores")]
     [ApiController]
     public class fornecedoresController : MainController
     {
