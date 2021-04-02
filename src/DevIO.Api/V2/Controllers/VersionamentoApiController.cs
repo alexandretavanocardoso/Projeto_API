@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DevIO.Api.V2.Controllers
 {
     [ApiVersion("2.0")]
-    [Route("api/v1/versionamentoApi")]
+    [Route("api/v2/versionamentoApi")]
     [ApiController]
     public class VersionamentoApiController : MainController
     {
