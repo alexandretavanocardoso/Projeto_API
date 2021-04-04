@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DevIO.Api.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -20,7 +21,6 @@ namespace DevIO.Api.Configuration
             services.AddSwaggerGen(c =>
             {
                 c.OperationFilter<SwaggerDefaultValues>();
-
 
                 #region [ Segurança com JWT ] 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -89,7 +89,7 @@ namespace DevIO.Api.Configuration
             // Criando documentacao Minima
             var info = new OpenApiInfo()
             {
-                Title = "API - Alexandre Tavano",
+                Title = "Alexandre Tavano",
                 Version = description.ApiVersion.ToString(),
                 Description = "Esta API faz parte do curso REST com ASP.NET Core WebAPI.",
                 Contact = new OpenApiContact() { Name = "Alexandre Tavano", Email = "AlexandreTavanoDeveloper@outlook.com" },

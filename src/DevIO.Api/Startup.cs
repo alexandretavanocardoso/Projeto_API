@@ -1,7 +1,9 @@
 using DevIO.Api.Configuration;
 using DevIO.Api.Extensions;
 using DevIO.Data.Context;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +32,12 @@ namespace DevIO.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<MeuDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
+
+
             services.AddIdentityConfiguration(Configuration);
 
             // Usando Mapper
@@ -41,9 +49,9 @@ namespace DevIO.Api
             services.AddSwaggerConfig();
             #endregion [ Documentação Swagger ]
 
-            #region [ Elmah.io ]
-            services.AddLoggingConfig();
-            #endregion [ Elmah.io ]
+            #region [ Elmah.io, Healt Checks ]
+            services.AddLoggingConfig(Configuration);
+            #endregion [ Elmah.io, Healt Checks ]
 
             // Inicializa as injeções de dependecias - Metodo Criado
             services.ResolveDependecies();
@@ -73,15 +81,9 @@ namespace DevIO.Api
             app.UseSwaggerConfig(provider);
             #endregion [ Swagger ]
 
-            #region [ Elmah.io ]
+            #region [ Elmah.io, HealthChecks ]
             app.UseLoggingConfiguration();
-            #endregion [ Elmah.io ]
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
+            #endregion [ Elmah.io, HealthChecks ]
         }
     }
 }

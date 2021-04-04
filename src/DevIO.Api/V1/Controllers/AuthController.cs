@@ -19,8 +19,8 @@ using System.Threading.Tasks;
 namespace DevIO.Api.V1.Controllers
 {
     [ApiVersion("1.0")]
-    [Route("api/v1/Autenticacao")]
-    [ApiController]
+    [Route("api/v{version:apiVersion}/Autenticacao")]
+    //[ApiExplorerSettings(GroupName = "Autenticação", IgnoreApi = false)]
     public class AuthController : MainController
     {
         private readonly SignInManager<IdentityUser> _signInManager; // Autenticacao usuario
@@ -41,7 +41,7 @@ namespace DevIO.Api.V1.Controllers
             _logger = logger;
         }
 
-        [HttpPost("novaConta")]
+        [HttpPost("criarNovaAutenticacao")]
         public async Task<ActionResult> Registrar(RegisterUserViewModel registerUser)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
@@ -72,7 +72,7 @@ namespace DevIO.Api.V1.Controllers
             return CustomResponse(registerUser);
         }
 
-        [HttpPost("entrar")]
+        [HttpPost("autenticar")]
         public async Task<ActionResult> Login(LoginUserViewModel loginUser)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);

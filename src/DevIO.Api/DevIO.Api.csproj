@@ -5,8 +5,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="V1\Controllers\ProdutosImagemController.txt" />
+    <None Remove="ViewModels\ProdutoImagemViewModel.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="V1\Controllers\ProdutosImagemController.txt" />
+    <Compile Include="ViewModels\ProdutoImagemViewModel.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="5.0.2" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="3.1.3" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="3.1.2" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Elmah.Io.AspNetCore" Version="3.11.17" />
+    <PackageReference Include="Elmah.Io.AspNetCore.HealthChecks" Version="3.11.17" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.13" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.13" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.13" />

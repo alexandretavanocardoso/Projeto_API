@@ -80,6 +80,11 @@ namespace DevIO.Api.Configuration
             app.UseRouting();
             app.UseAuthorization();
 
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
             return app;
         }
 

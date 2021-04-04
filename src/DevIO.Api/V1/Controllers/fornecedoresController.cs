@@ -16,8 +16,8 @@ namespace DevIO.Api.V1.Controllers
 {
     [Authorize] // Autorização para entrar na API
     [ApiVersion("1.0")]
-    [Route("api/v1/fornecedores")]
-    [ApiController]
+    [Route("api/v{version:apiVersion}/fornecedores")]
+    //[ApiExplorerSettings(GroupName = "Fornecedores", IgnoreApi = true)]
     public class fornecedoresController : MainController
     {
         private readonly IFornecedorService _fornecedorService;

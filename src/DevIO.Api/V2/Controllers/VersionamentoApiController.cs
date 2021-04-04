@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 namespace DevIO.Api.V2.Controllers
 {
     [ApiVersion("2.0")]
-    [Route("api/v2/versionamentoApi")]
+    [Route("api/v{version:apiVersion}/versionamentoApi")]
+    [ApiExplorerSettings(GroupName = "Teste", IgnoreApi = true)]
     [ApiController]
     public class VersionamentoApiController : MainController
     {
@@ -26,17 +27,18 @@ namespace DevIO.Api.V2.Controllers
 
         [HttpGet("valor")]
         public string Valor()
-        {
-            try
-            {
-                var i = 0;
-                var result = 42 / i;
-            } 
-            catch (DivideByZeroException e)
-            {
-                // Envia o erro para o elmah
-                e.Ship(HttpContext);
-            }
+        {//throw new Exception("Error");
+
+            //try
+            //{
+            //    var i = 0;
+            //    var result = 42 / i;
+            //}
+            //catch (DivideByZeroException e)
+            //{
+            //    Envia o erro para o elmah
+            //    e.Ship(HttpContext);
+            //}
 
             #region[ Tipos de Logging ]
             _logger.LogTrace("Log de Trace");  // log de desenvolvimento

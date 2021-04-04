@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Models\ProdutoImagem.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Models\ProdutoImagem.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="9.3.0" />
   </ItemGroup>
 

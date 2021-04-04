@@ -1,0 +1,23 @@
+﻿AutoMapper - Mapear entidades
+automapper.extensions.microsoft.dependencyinjection
+
+Elmah.Io - Monitorar Log
+elmah.io.aspnetcore
+
+Jwt
+microsoft.aspnetcore.authentication.jwtbearer
+
+Versionamento Api
+microsoft.aspnetcore.mvc.versioning
+microsoft.aspnetcore.mvc.versioning.apiexplorer
+
+Swagger
+swashbuckle.aspnetcore
+
+Health Checks para o Sql
+AspNetCore.HealthChecks.SqlServer
+Health Checks para interface
+AspNetCore.HealthChecks.UI
+
+Ligando Elmah com Health
+Elmah.Io.AspNetCore.HealthChecks

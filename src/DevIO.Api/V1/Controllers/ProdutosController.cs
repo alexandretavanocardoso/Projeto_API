@@ -3,6 +3,7 @@ using DevIO.Api.Controller;
 using DevIO.Api.ViewModels;
 using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,9 +14,10 @@ using System.Threading.Tasks;
 
 namespace DevIO.Api.V1.Controllers
 {
+    [Authorize] // Autorização para entrar na API
     [ApiVersion("1.0")]
-    [Route("api/v1/produtos")]
-    [ApiController]
+    [Route("api/v{version:apiVersion}/produtos")]
+    //[ApiExplorerSettings(GroupName = "Produtos", IgnoreApi = true)]
     public class ProdutosController : MainController
     {
         private readonly IProdutoRepository _produtoRepository;
@@ -111,6 +113,7 @@ namespace DevIO.Api.V1.Controllers
             return true;
         }
 
+        [HttpGet("obterTodos")]
         public async Task<ProdutoViewModel> ObterProduto(Guid id)
         {
             return _mapper.Map<ProdutoViewModel>(await _produtoRepository.ObterProdutoFornecedor(id));
