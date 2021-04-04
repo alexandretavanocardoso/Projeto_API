@@ -1,4 +1,5 @@
 using DevIO.Api.Configuration;
+using DevIO.Api.Extensions;
 using DevIO.Data.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,6 +41,10 @@ namespace DevIO.Api
             services.AddSwaggerConfig();
             #endregion [ Documentação Swagger ]
 
+            #region [ Elmah.io ]
+            services.AddLoggingConfig();
+            #endregion [ Elmah.io ]
+
             // Inicializa as injeções de dependecias - Metodo Criado
             services.ResolveDependecies();
         }
@@ -59,11 +64,18 @@ namespace DevIO.Api
             }
 
             app.UseAuthentication();
+
+            app.UseMiddleware<ExceptionMiddleware>();
+
             app.UseMvcConfiguration();
 
             #region [ Swagger ]
             app.UseSwaggerConfig(provider);
             #endregion [ Swagger ]
+
+            #region [ Elmah.io ]
+            app.UseLoggingConfiguration();
+            #endregion [ Elmah.io ]
 
             app.UseEndpoints(endpoints =>
             {

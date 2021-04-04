@@ -6,6 +6,7 @@ using DevIO.Api.ViewModels;
 using DevIO.Business.Intefaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -19,21 +20,25 @@ namespace DevIO.Api.V1.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v1/Autenticacao")]
+    [ApiController]
     public class AuthController : MainController
     {
         private readonly SignInManager<IdentityUser> _signInManager; // Autenticacao usuario
         private readonly UserManager<IdentityUser> _userManager; // cria usuario
         private readonly AppSettings _appSettings; // cria usuario
+        private readonly ILogger _logger;
 
         public AuthController(INotificador notificador,
                               SignInManager<IdentityUser> signInManager,
                               UserManager<IdentityUser> userManager,
                               IOptions<AppSettings> appSettings,
-                              IUser user) : base(notificador, user)
+                              IUser user,
+                              ILogger<AuthController> logger) : base(notificador, user)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
 
         [HttpPost("novaConta")]
@@ -76,6 +81,8 @@ namespace DevIO.Api.V1.Controllers
 
             if (result.Succeeded)
             {
+                // Logger
+                _logger.LogInformation("usuário" + loginUser.Email + " logado com sucesso");
                 return CustomResponse(await GerarJsonWebToken(loginUser.Email));
             }
 

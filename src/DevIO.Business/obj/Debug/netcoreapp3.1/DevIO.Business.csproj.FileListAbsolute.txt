@@ -1,9 +1,9 @@
 C:\Users\usuario\Desktop\MinhasAPICompleta\src\DevIO.Business\bin\Debug\netcoreapp3.1\DevIO.Business.deps.json
 C:\Users\usuario\Desktop\MinhasAPICompleta\src\DevIO.Business\bin\Debug\netcoreapp3.1\DevIO.Business.dll
 C:\Users\usuario\Desktop\MinhasAPICompleta\src\DevIO.Business\bin\Debug\netcoreapp3.1\DevIO.Business.pdb
+C:\Users\usuario\Desktop\MinhasAPICompleta\src\DevIO.Business\obj\Debug\netcoreapp3.1\DevIO.Business.csprojAssemblyReference.cache
 C:\Users\usuario\Desktop\MinhasAPICompleta\src\DevIO.Business\obj\Debug\netcoreapp3.1\DevIO.Business.AssemblyInfoInputs.cache
 C:\Users\usuario\Desktop\MinhasAPICompleta\src\DevIO.Business\obj\Debug\netcoreapp3.1\DevIO.Business.AssemblyInfo.cs
 C:\Users\usuario\Desktop\MinhasAPICompleta\src\DevIO.Business\obj\Debug\netcoreapp3.1\DevIO.Business.csproj.CoreCompileInputs.cache
 C:\Users\usuario\Desktop\MinhasAPICompleta\src\DevIO.Business\obj\Debug\netcoreapp3.1\DevIO.Business.dll
 C:\Users\usuario\Desktop\MinhasAPICompleta\src\DevIO.Business\obj\Debug\netcoreapp3.1\DevIO.Business.pdb
-C:\Users\usuario\Desktop\MinhasAPICompleta\src\DevIO.Business\obj\Debug\netcoreapp3.1\DevIO.Business.csprojAssemblyReference.cache

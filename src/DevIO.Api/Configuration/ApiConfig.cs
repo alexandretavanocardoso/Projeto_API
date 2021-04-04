@@ -19,7 +19,7 @@ namespace DevIO.Api.Configuration
             services.AddApiVersioning(options =>
             {
                 options.AssumeDefaultVersionWhenUnspecified = true; // Quando não tiver versão especificada sobe a default
-                options.DefaultApiVersion = new ApiVersion(1, 0); // Versão 2.0
+                options.DefaultApiVersion = new ApiVersion(1, 0); // Versão 1.0
                 options.ReportApiVersions = true; // Passa no header do response para saber se a versao esta Ok
             });
 
