@@ -20,7 +20,7 @@ namespace DevIO.Api.V1.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/Autenticacao")]
-    //[ApiExplorerSettings(GroupName = "Autenticação", IgnoreApi = false)]
+    //[ApiExplorerSettings(GroupName = "Autenticação")]
     public class AuthController : MainController
     {
         private readonly SignInManager<IdentityUser> _signInManager; // Autenticacao usuario

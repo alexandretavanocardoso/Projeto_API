@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DevIO.Api.Swagger;
+﻿using DevIO.Api.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -11,6 +7,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DevIO.Api.Configuration
 {
@@ -62,7 +61,9 @@ namespace DevIO.Api.Configuration
                 {
                     foreach (var description in provider.ApiVersionDescriptions)
                     {
-                        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                        string swaggerPath = (String.IsNullOrEmpty(options.RoutePrefix) ? "." : "..");
+                        string endPoint = $"{swaggerPath}/swagger/" + description.GroupName + "/swagger.json" ;
+                        options.SwaggerEndpoint(endPoint, $"Minha Api - {description.GroupName.ToUpperInvariant()}");
                     }
                 });
             return app;
@@ -80,29 +81,17 @@ namespace DevIO.Api.Configuration
             // Pega todas versoes e adiciona um Doc
             foreach (var description in provider.ApiVersionDescriptions)
             {
-                options.SwaggerDoc(description.GroupName, CreateInfoForApiVersion(description));
+                options.SwaggerDoc(
+                    description.GroupName,
+                    new OpenApiInfo()
+                    {
+                        Title = $"Minha Api {description.GroupName}",
+                        Version = description.ApiVersion.ToString(),
+                        Description = "Esta API faz parte do curso REST com ASP.NET Core WebAPI.",
+                        Contact = new OpenApiContact() { Name = "Alexandre Tavano", Email = "AlexandreTavanoDeveloper@outlook.com" },
+                        License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
+                    });
             }
-        }
-
-        static OpenApiInfo CreateInfoForApiVersion(ApiVersionDescription description)
-        {
-            // Criando documentacao Minima
-            var info = new OpenApiInfo()
-            {
-                Title = "Alexandre Tavano",
-                Version = description.ApiVersion.ToString(),
-                Description = "Esta API faz parte do curso REST com ASP.NET Core WebAPI.",
-                Contact = new OpenApiContact() { Name = "Alexandre Tavano", Email = "AlexandreTavanoDeveloper@outlook.com" },
-                License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
-            };
-
-            // Se versão estiver obsoleta
-            if (description.IsDeprecated)
-            {
-                info.Description += " Esta versão está obsoleta!";
-            }
-
-            return info;
         }
     }
 
